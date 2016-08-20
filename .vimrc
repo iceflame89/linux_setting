@@ -1,3 +1,60 @@
+
+""" for vundle 2016-08-24 
+set nocompatible              " be iMproved, required
+filetype off                  " required
+
+" set the runtime path to include Vundle and initialize
+set rtp+=~/.vim/bundle/Vundle.vim
+call vundle#begin()
+" alternatively, pass a path where Vundle should install plugins
+"call vundle#begin('~/some/path/here')
+
+" let Vundle manage Vundle, required
+Plugin 'VundleVim/Vundle.vim'
+
+" The following are examples of different formats supported.
+" Keep Plugin commands between vundle#begin/end.
+" plugin on GitHub repo
+"Plugin 'tpope/vim-fugitive'
+Plugin 'Valloric/YouCompleteMe'
+Plugin 'rdnetto/YCM-Generator'
+
+" plugin from http://vim-scripts.org/vim/scripts.html
+"Plugin 'L9'
+" Git plugin not hosted on GitHub
+"Plugin 'git://git.wincent.com/command-t.git'
+" git repos on your local machine (i.e. when working on your own plugin)
+"Plugin 'file:///home/gmarik/path/to/plugin'
+" The sparkup vim script is in a subdirectory of this repo called vim.
+" Pass the path to set the runtimepath properly.
+"Plugin 'rstacruz/sparkup', {'rtp': 'vim/'}
+" Install L9 and avoid a Naming conflict if you've already installed a
+" different version somewhere else.
+"Plugin 'ascenator/L9', {'name': 'newL9'}
+
+" All of your Plugins must be added before the following line
+call vundle#end()            " required
+filetype plugin indent on    " required
+" To ignore plugin indent changes, instead use:
+"filetype plugin on
+"
+" Brief help
+" :PluginList       - lists configured plugins
+" :PluginInstall    - installs plugins; append `!` to update or just
+" :PluginUpdate
+" :PluginSearch foo - searches for foo; append `!` to refresh local cache
+" :PluginClean      - confirms removal of unused plugins; append `!` to auto-approve removal
+"
+" see :h vundle for more details or wiki for FAQ
+" Put your non-Plugin stuff after this line
+
+" jump to definition or declaration
+nnoremap <leader>jj :YcmCompleter GoToDefinitionElseDeclaration<CR>
+map <F12> :! ~/.vim/bundle/YCM-Generator/config_gen.py -F ycm . </dev/null<CR>
+
+
+
+
 """""""""""""""""""
 " 显示相关 
 " """""""""""""""""""
@@ -31,30 +88,29 @@ func SetTitle()
 "如果文件类型为.sh文件 
 if &filetype == 'sh' 
 call setline(1,"\#########################################################################") 
-call append(line("."), "\# File Name: ".expand("%")) 
-call append(line(".")+1, "\# Author: Hongji Zhu") 
-call append(line(".")+2, "\# mail: fireyoucan@gmail.com") 
-call append(line(".")+3, "\# Created Time: ".strftime("%c")) 
-call append(line(".")+4, "\#########################################################################") 
-call append(line(".")+5, "\#!/bin/bash") 
-call append(line(".")+6, "") 
+call append(line("."), "\# Author: Hongji Zhu") 
+call append(line(".")+1, "\# Created On: ".strftime("%c")) 
+call append(line(".")+2, "\#########################################################################") 
+call append(line(".")+3, "\#!/bin/bash") 
+call append(line(".")+4, "") 
+elseif &filetype == 'py'
+call setline(1,"\######") 
+call append(line(".")+1, "") 
 else 
 call setline(1,"/*************************************************************************") 
-call append(line("."), " > File Name: ".expand("%")) 
-call append(line(".")+1, " > Author: Hongji Zhu") 
-call append(line(".")+2, " > Mail: fireyoucan@gmail.com") 
-call append(line(".")+3, " > Created Time: ".strftime("%c")) 
-call append(line(".")+4, "************************************************************************/") 
-call append(line(".")+5, "")
+call append(line("."), " > Author: Hongji Zhu") 
+call append(line(".")+1, " > Created On: ".strftime("%c")) 
+call append(line(".")+2, "************************************************************************/") 
+call append(line(".")+3, "")
 endif
 if &filetype == 'cpp'
-call append(line(".")+6, "#include<iostream>")
-call append(line(".")+7, "using namespace std;")
-call append(line(".")+8, "")
+call append(line(".")+4, "#include<iostream>")
+call append(line(".")+5, "using namespace std;")
+call append(line(".")+6, "")
 endif
 if &filetype == 'c'
-call append(line(".")+6, "#include<stdio.h>")
-call append(line(".")+7, "")
+call append(line(".")+4, "#include<stdio.h>")
+call append(line(".")+5, "")
 endif
 "新建文件后，自动定位到文件末尾
 autocmd BufNewFile * normal G
@@ -113,7 +169,7 @@ autocmd FileType c,cpp map <buffer> <leader><space> :w<cr>:make<cr>
 "代码补全 
 set completeopt=preview,menu 
 "允许插件 
-filetype plugin on
+""filetype plugin on
 "共享剪贴板 
 set clipboard+=unnamed 
 "从不备份 
@@ -226,83 +282,45 @@ else
 return a:char
 endif
 endfunction
-filetype plugin indent on 
-"打开文件类型检测, 加了这句才可以用智能补全
-set completeopt=longest,menu
-""""""""""""""""""""""""""""""""
-" CTags的设定 
-""""""""""""""""""""""""""""""""
-map <F12> :!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q .<CR>
+
+""filetype plugin indent on 
+"""打开文件类型检测, 加了这句才可以用智能补全
+""set completeopt=longest,menu
+""""""""""""""""""""""""""""""""""
+""" CTags的设定 
+""""""""""""""""""""""""""""""""""
+""map <F12> :!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q .<CR>
 map <F3> :silent! Tlist<CR> "按下F3就可以呼出了"
-let Tlist_Sort_Type = "name" " 按照名称排序 
-let Tlist_Use_Right_Window = 1 " 在右侧显示窗口 
-let Tlist_Compart_Format = 1 " 压缩方式 
-let Tlist_Exist_OnlyWindow = 1 " 如果只有一个buffer，kill窗口也kill掉buffer 
-let Tlist_File_Fold_Auto_Close = 0 " 不要关闭其他文件的tags 
-let Tlist_Enable_Fold_Column = 0 " 不要显示折叠树 
-autocmd FileType java set tags+=D:\tools\java\tags 
-"autocmd FileType h,cpp,cc,c set tags+=D:\tools\cpp\tags 
-"let Tlist_Show_One_File=1 "不同时显示多个文件的tag，只显示当前文件的
-"设置tags 
+""let Tlist_Sort_Type = "name" " 按照名称排序 
+""let Tlist_Use_Right_Window = 1 " 在右侧显示窗口 
+""let Tlist_Compart_Format = 1 " 压缩方式 
+""let Tlist_Exist_OnlyWindow = 1 " 如果只有一个buffer，kill窗口也kill掉buffer 
+""let Tlist_File_Fold_Auto_Close = 0 " 不要关闭其他文件的tags 
+""let Tlist_Enable_Fold_Column = 0 " 不要显示折叠树 
+""autocmd FileType java set tags+=D:\tools\java\tags 
+"""autocmd FileType h,cpp,cc,c set tags+=D:\tools\cpp\tags 
+"""let Tlist_Show_One_File=1 "不同时显示多个文件的tag，只显示当前文件的
+"""设置tags 
 set tags=tags;
 set autochdir
-"""""""""""""""""""""""""
-"其他东东
-"""""""""""""""""""""""""
-"默认打开Taglist 
-let Tlist_Auto_Open=0 
-"""""""""""""""""""""""""""""" 
-" Tag list (ctags) 
+"""""""""""""""""""""""""""
+"""其他东东
+"""""""""""""""""""""""""""
+"""默认打开Taglist 
+""let Tlist_Auto_Open=0 
 """""""""""""""""""""""""""""""" 
-let Tlist_Ctags_Cmd = '/usr/bin/ctags' 
-let Tlist_Show_One_File = 1 "不同时显示多个文件的tag，只显示当前文件的 
-let Tlist_Exit_OnlyWindow = 1 "如果taglist窗口是最后一个窗口，则退出vim 
-let Tlist_Use_Right_Window = 0 "在右侧窗口中显示taglist窗口
-" minibufexpl插件的一般设置
-let g:miniBufExplMapWindowNavVim = 1
-let g:miniBufExplMapWindowNavArrows = 1
-let g:miniBufExplMapCTabSwitchBufs = 1
-let g:miniBufExplModSelTarget = 1
+""" Tag list (ctags) 
+"""""""""""""""""""""""""""""""""" 
+""let Tlist_Ctags_Cmd = '/usr/bin/ctags' 
+""let Tlist_Show_One_File = 1 "不同时显示多个文件的tag，只显示当前文件的 
+""let Tlist_Exit_OnlyWindow = 1 "如果taglist窗口是最后一个窗口，则退出vim 
+""let Tlist_Use_Right_Window = 0 "在右侧窗口中显示taglist窗口
+""" minibufexpl插件的一般设置
+""let g:miniBufExplMapWindowNavVim = 1
+""let g:miniBufExplMapWindowNavArrows = 1
+""let g:miniBufExplMapCTabSwitchBufs = 1
+""let g:miniBufExplModSelTarget = 1
 
-"""" for omnicppcomplete 2015-12-25
-set nocp
 
-
-"""" for bundle 2015-12-24 
-""set nocompatible                " be iMproved
-""filetype off                    " required!
-""set rtp+=~/.vim/bundle/vundle/
-""call vundle#rc()
-
-" let Vundle manage Vundle
-""Bundle 'gmarik/vundle'
-
-" my Bundle here:
-"
-" Type 1: original repos on github
-""Bundle 'kien/ctrlp.vim'
-""Bundle 'sukima/xmledit'
-""Bundle 'sjl/gundo.vim'
-""Bundle 'jiangmiao/auto-pairs'
-""Bundle 'klen/python-mode'
-""Bundle 'Valloric/ListToggle'
-"Bundle 'SirVer/ultisnips'
-"Bundle 'Valloric/YouCompleteMe'
-""Bundle 'scrooloose/syntastic'
-""Bundle 't9md/vim-quickhl'
-" Bundle 'Lokaltog/vim-powerline'
-"Bundle 'scrooloose/nerdcommenter'
-"..................................
-" Type 2: vim-scripts repos
-"Bundle 'YankRing.vim'
-"Bundle 'vcscommand.vim'
-"Bundle 'ShowPairs'
-"Bundle 'SudoEdit.vim'
-"Bundle 'EasyGrep'
-"Bundle 'VOoM'
-"Bundle 'VimIM'
-"..................................
-" Type 3: non github repos
-" Bundle 'git://git.wincent.com/command-t.git'
-"......................................
-" filetype plugin indent on
+set t_ti= t_te=
+""set term=xterm ""clean vim window
